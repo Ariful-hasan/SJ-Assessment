@@ -1,13 +1,12 @@
-# Console-Weather-App 
+# Implement Chat feature 
 ### Composer CLI:
 ```bash
-composer update
-composer dump-autoload
+npm install
 ```
 
 ### System run command:
 ```bash
-php index.php
+nodemon
 ```
 
 ### Application structure:
