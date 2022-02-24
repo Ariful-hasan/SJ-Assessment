@@ -1,0 +1,31 @@
+
+<div class="row">
+    <div class="offset-md-2 col-md-8">
+        <div class="card">
+            <div class="card-header">Login</div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    
+                    <% include('../partials/messages') %>
+
+                    <form action="/admin/login" method="POST">
+                        <h5 class="card-title"><%= typeof data.pageTitle !== 'undefine' ? data.pageTitle : '' %></h5>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User</label>
+                            <input type="text" class="form-control" id="email" name="email"
+                                aria-describedby="emailHelp" placeholder="Enter user">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

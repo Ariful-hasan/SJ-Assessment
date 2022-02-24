@@ -1,0 +1,93 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/chat.js"></script>
+
+<div class="container">
+    <div class="row p-3">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Online Users</div>
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <table class="table table-hover ">
+                            <tbody id="online_table">
+                                <% if (typeof data.onlineUsers !=='undefined' ) { %>
+                                    <% data.onlineUsers.forEach(function(user){ %>
+                                        <tr class="online-user" data-name="<%= user.name %>" id="<%= user.id %>">
+                                            <td><%= user.name %></td>
+                                            <td class="text-center"><span class="dot"></span></td>
+                                        </tr>
+                                    <% }); %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 p-0 d-none" id="chat_div">
+            <div class="card window-height" id="">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6" id="chat_name"></div>
+                    </div>
+                </div>
+                <div class="card-body pt-2" id="sub_chat_window">
+                    <div class="col-md-12 mb-1 p-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div id="msg_list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <a class="float-right pull-right" id="logout" href="/logout">Logout</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    var socket = io();
+    var user_name = "<%= data.name %>";
+    var current_user = "<%= data.id %>";
+    let user_info = { "name": user_name, "id": current_user };
+    
+    $(document).ready(function () {
+
+        socket.on('connect', () => {
+            socket.emit("login", user_info);
+        });
+
+        socket.on('new-user', (data) => {
+            console.log(data);
+            addOnlineUser(data);
+        });
+
+        $("#logout").on('click', () => {
+            socket.emit("logout", user_info);
+        });
+
+        socket.on('user-loggedout', (data) => {
+            removeOnlineUser(data);
+        });
+
+        $(".online-user").on ('click', function() {
+            let name = $(this).data('name');
+            let id = $(this).attr('id');
+
+            if ($("#chat_div").hasClass("d-none")) {
+                $("#chat_div").removeClass("d-none").addClass("d-block");
+            }
+            $("#chat_name").html(name);
+            getMessageByUserId(id);
+        });
+        
+    });
+</script>
